@@ -50,10 +50,10 @@ const useMainStore = defineStore('main', () => {
     }
   };
 
-  const closePopup = () => {
-    popupState.value = Popup.NULL;
-    setGameState(GameState.GAME);
-  };
+  // const closePopup = () => {
+  //   popupState.value = Popup.NULL;
+  //   setGameState(GameState.GAME);
+  // };
 
   const setDamage = () => {
     healthPoints.value -= 1;

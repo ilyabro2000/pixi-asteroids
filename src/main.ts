@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+// ts-ignore eslint-disable-next-line no-underscore-dangle
 import App from './App.vue';
 
 const app = createApp(App);

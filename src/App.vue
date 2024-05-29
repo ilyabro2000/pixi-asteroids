@@ -12,12 +12,6 @@ import GameScene from '@/components/GameScene.vue';
 .app {
   position: relative;
   margin: 0 auto;
-  padding: 1rem 3rem;
-  min-height: 100vh;
-  overflow-x: hidden;
-
-  @include layout-mobile {
-    padding: 1rem 1.6rem;
-  }
+  overflow: hidden;
 }
 </style>

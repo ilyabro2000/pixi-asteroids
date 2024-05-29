@@ -1,11 +1,10 @@
 import { Assets } from 'pixi.js';
-
-let assetsManifest: any = { bundles: [] };
+import assetsManifestJson from '@/assets/assets-manifest.json';
 
 const loadedBundles: string[] = [];
 
 const checkBundleExists = (bundle: string) => (
-  !!assetsManifest.bundles.find((b: { name: string }) => b.name === bundle)
+  assetsManifestJson.bundles.some((b: { name: string }) => b.name === bundle)
 );
 
 export const loadBundles = async (bundles: string | string[]) => {
@@ -36,23 +35,12 @@ export const areBundlesLoaded = (bundles: string[]) => {
   return true;
 };
 
-const fetchAssetsManifest = async (url: string) => {
-  const response = await fetch(url);
-  const manifest = await response.json();
-  if (!manifest.bundles) {
-    throw new Error('[Assets] Invalid assets manifest');
-  }
-  return manifest;
-};
-
 export const initAssets = async () => {
-  assetsManifest = await fetchAssetsManifest('assets/assets-manifest.json');
-
-  await Assets.init({ manifest: assetsManifest, basePath: 'assets' });
+  await Assets.init({ manifest: assetsManifestJson, basePath: 'assets' });
 
   await loadBundles(['game']);
 
-  const allBundles = assetsManifest.bundles.map((b: { name: string}) => b.name);
+  const allBundles = assetsManifestJson.bundles.map((b: { name: string}) => b.name);
 
   Assets.backgroundLoadBundle(allBundles);
 };

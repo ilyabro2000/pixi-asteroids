@@ -8,6 +8,7 @@ html, body {
   width: 100vw;
   max-height: 100%;
   line-height: 1.4;
+  overflow: hidden;
   font-family: $font-default !important;
   color: white;
   -moz-osx-font-smoothing: grayscale;
