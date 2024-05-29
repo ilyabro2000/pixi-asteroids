@@ -1,0 +1,14 @@
+@mixin font($alias, $name, $weight, $style) {
+  @font-face {
+    font-family: $alias;
+    font-weight: $weight;
+    font-style: $style;
+    font-display: swap;
+  }
+}
+
+@include font($font-default-name, $font-default-name + '_Regular', $font-weight-regular, 'normal');
+@include font($font-default-name, $font-default-name + '_Light', $font-weight-light, 'normal');
+@include font($font-default-name, $font-default-name + '_ExtraBold', $font-weight-extra-bold, 'normal');
+@include font($font-default-name, $font-default-name + '_DemiBold', $font-weight-semi-bold, 'normal');
+@include font($font-default-name, $font-default-name + '_Bold', $font-weight-bold, 'normal');

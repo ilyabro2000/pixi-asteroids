@@ -1,0 +1,23 @@
+/* Responsive Breakpoints */
+$breakpoint-mobile: 729px;
+$breakpoint-tablet: 1024px;
+
+/* Font */
+$font-default-name: 'Roboto Condensed';
+$font-default: $font-default-name, sans-serif;
+$font-weight-thin: 100;
+$font-weight-extra-light: 200;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semi-bold: 600;
+$font-weight-bold: 700;
+$font-weight-extra-bold: 800;
+$font-weight-black: 900;
+$font-weight-extra-black: 950;
+
+$base-font-size: 16px;
+
+/* Colors */
+$color-main: #02223d;
+

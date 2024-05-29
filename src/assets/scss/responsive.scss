@@ -1,0 +1,34 @@
+@use "sass:math";
+
+/* Responsive breakpoints */
+@mixin layout-mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin layout-tablet {
+  @media (max-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin layout-aspect-tablet() {
+  @media (max-aspect-ratio: 14/10) {
+    @content;
+  }
+}
+
+@mixin layout-aspect-mobile() {
+  @media (max-aspect-ratio: 9/10) {
+    @content;
+  }
+}
+
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
