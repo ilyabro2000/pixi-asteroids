@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { DEFAULT_HEALTH_COUNT, GameState, SCORE_GOAL } from '@/types/Game';
 import { Popup } from '@/types/Popup';
+import events from '@/types/events';
+import Emitter from '@/game/Emitter';
 
 const useMainStore = defineStore('main', () => {
   const score = ref(0);
@@ -23,6 +25,8 @@ const useMainStore = defineStore('main', () => {
 
   const setPopup = (popup: Popup) => {
     popupState.value = popup;
+
+    Emitter.emit(events.SET_PAUSE, popup !== Popup.NULL);
   };
 
   const setGameState = (state: GameState) => {
@@ -66,6 +70,14 @@ const useMainStore = defineStore('main', () => {
       setGameState(GameState.GAME_OVER_WIN);
     }
   };
+
+  Emitter.on(events.SET_SCORE, (value: number) => {
+    setScore(value);
+  });
+
+  Emitter.on(events.SET_DAMAGE, () => {
+    setDamage();
+  });
 
   return {
     windowWidth,
