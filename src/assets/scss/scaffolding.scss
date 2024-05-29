@@ -5,7 +5,8 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   height: 100%;
-  min-height: 100%;
+  width: 100vw;
+  max-height: 100%;
   line-height: 1.4;
   font-family: $font-default !important;
   color: white;
@@ -13,11 +14,10 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  background-color: $color-main;
   font-size: 0.6944444444vw;
 
   @include layout-mobile {
-    font-size: 10px;
+    font-size: 2.6666666667vw;;
   }
 
   *, *:before, *:after {
@@ -52,6 +52,11 @@ html, body {
       border-radius: .5rem;
     }
   }
+}
+
+html {
+  background: $color-main;
+  color: $color-additional;
 }
 
 #app {

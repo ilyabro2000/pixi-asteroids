@@ -1,17 +1,11 @@
 <template>
   <div class="app">
-    <h1 class="app__title">
-      Template
-    </h1>
+    <GameScene class="app__game" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from '@/store/main';
-
-const mainStore = useMainStore();
-
-mainStore.observeWindowSize();
+import GameScene from '@/components/GameScene.vue';
 </script>
 
 <style lang="scss">

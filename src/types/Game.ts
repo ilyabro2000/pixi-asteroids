@@ -1,0 +1,16 @@
+enum GameState {
+  GAME = 'PLAY',
+  PAUSE = 'PAUSE',
+  GAME_OVER_WIN = 'GAME_OVER_WIN',
+  GAME_OVER_LOSE = 'GAME_OVER_LOSE',
+}
+
+const DEFAULT_HEALTH_COUNT = 3;
+
+const SCORE_GOAL = 1000;
+
+export {
+  GameState,
+  DEFAULT_HEALTH_COUNT,
+  SCORE_GOAL,
+};

@@ -3,30 +3,28 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
-export default defineConfig(() => {
-  return {
-    base: 'template-vue',
-    plugins: [
-      vue(),
-    ],
-    resolve: {
-      alias: {
-        '@': resolve(__dirname, 'src'),
+export default defineConfig(() => ({
+  base: 'pixi-asteroids',
+  plugins: [
+    vue(),
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/assets/scss/main.scss";',
       },
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@import "@/assets/scss/main.scss";',
-        },
-      },
+  },
+  server: {
+    port: 8080,
+    host: true,
+    fs: {
+      allow: ['../'],
     },
-    server: {
-      port: 8080,
-      host: true,
-      fs: {
-        allow: ['../'],
-      },
-    },
-  };
-});
+  },
+}));
