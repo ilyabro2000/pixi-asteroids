@@ -4,20 +4,31 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "stats": "vite build --mode=stats"
+    "build": "tsc && vite build",
+    "preview": "npm run build && vite preview --open",
+    "dev": "npm run assets && vite",
+    "assets": "assetpack -c .assetpack.js",
+    "clean": "node cmds.js clean"
   },
   "dependencies": {
+    "@pixi/particle-emitter": "^5.0.8",
     "lodash.throttle": "^4.1.1",
     "pinia": "^2.1.7",
+    "pixi.js": "^8.1.5",
     "vue": "^3.4.19"
   },
   "browsersList": [
     "cover 99%"
   ],
   "devDependencies": {
+    "@assetpack/cli": "^0.8.0",
+    "@assetpack/plugin-compress": "^0.8.0",
+    "@assetpack/plugin-ffmpeg": "^0.8.0",
+    "@assetpack/plugin-json": "^0.8.0",
+    "@assetpack/plugin-manifest": "^0.8.0",
+    "@assetpack/plugin-mipmap": "^0.8.0",
+    "@assetpack/plugin-texture-packer": "^0.8.0",
+    "@assetpack/plugin-webfont": "^0.8.0",
     "@types/lodash.throttle": "^4.1.9",
     "@types/node": "^20.11.17",
     "@vitejs/plugin-vue": "^5.0.4",
