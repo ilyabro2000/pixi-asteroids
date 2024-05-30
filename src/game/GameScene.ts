@@ -1,30 +1,22 @@
 import {
-  Container, Sprite, Texture,
+  Container,
 } from 'pixi.js';
+import { Player } from '@/game/Player';
 
 export class GameScene extends Container {
   public readonly gameContainer: Container;
 
-  private testPlayer = new Sprite();
+  private player: Player = new Player();
 
   constructor() {
     super();
     this.gameContainer = new Container();
 
     this.addChild(this.gameContainer);
-
-    this.testPlayer.texture = Texture.from('ship_sidesA');
-    this.testPlayer.anchor.set(0.5);
-    this.testPlayer.position.set(window.innerWidth / 2, window.innerHeight / 2);
-    this.testPlayer.width = 40;
-    this.testPlayer.height = 40;
-    this.gameContainer.addChild(this.testPlayer);
-    this.gameContainer.cursor = 'pointer';
-    this.gameContainer.interactive = true;
   }
 
   public prepare() {
-    //
+    this.gameContainer.addChild(this.player);
   }
 
   public async pause() {
