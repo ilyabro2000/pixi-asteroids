@@ -34,7 +34,12 @@ export class Laser extends Container {
     this.position.x += rotatedVector.x * Laser.SPEED * deltaTime;
     this.position.y += rotatedVector.y * Laser.SPEED * deltaTime;
 
-    if (this.position.x < 0 || this.position.x > window.innerWidth || this.position.y < 0 || this.position.y > window.innerHeight) {
+    if (
+      this.position.x < 0
+        || this.position.x > window.innerWidth
+        || this.position.y < 0
+        || this.position.y > window.innerHeight
+    ) {
       pool.giveBack(this);
       this.removeFromParent();
     }

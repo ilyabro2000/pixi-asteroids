@@ -9,11 +9,14 @@ import { Laser } from '@/game/Laser';
 import { pool } from '@/game/pool/MultiPool';
 import Emitter from '@/game/Emitter';
 import Events from '@/types/events';
+import gsap from 'gsap';
 
 export class Player extends Container {
   private static DEFAULT_ACCELERATION = 0.5;
 
   private static SHOOT_DELAY = 100;
+
+  private static BACK_MOVE_KOEF = 0.5;
 
   private static WIDTH = 40;
 
@@ -37,6 +40,8 @@ export class Player extends Container {
 
   private shootCD = false;
 
+  private isImmortal = false;
+
   constructor() {
     super();
 
@@ -45,6 +50,7 @@ export class Player extends Container {
     this.sprite.anchor.set(0.5);
     this.sprite.width = Player.WIDTH;
     this.sprite.height = Player.HEIGHT;
+    this.sprite.tint = 'FF6500';
     this.position.set(window.innerWidth / 2, window.innerHeight / 2);
 
     this.addChild(this.sprite);
@@ -93,7 +99,7 @@ export class Player extends Container {
 
     const accelerationVector = Victor(
       0,
-      -this.inputVector.y * Player.DEFAULT_ACCELERATION * dt,
+      -this.inputVector.y * Player.DEFAULT_ACCELERATION * dt * (this.inputVector.y < 0 ? Player.BACK_MOVE_KOEF : 1),
     )
       .rotate(this.rotation);
 
@@ -125,5 +131,23 @@ export class Player extends Container {
     laser.position.set(this.position.x, this.position.y);
 
     Emitter.emit(Events.LASER_SHOT, laser);
+  }
+
+  getDamage() {
+    if (this.isImmortal) return;
+
+    this.isImmortal = true;
+    gsap.to(this.sprite, {
+      alpha: 0.2,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 10,
+      onComplete: () => {
+        this.sprite.alpha = 1;
+        this.isImmortal = false;
+      },
+    });
+
+    Emitter.emit(Events.PLAYER_DAMAGED);
   }
 }

@@ -6,6 +6,9 @@
 
 <script lang="ts" setup>
 import GameScene from '@/components/GameScene.vue';
+import { useMainStore } from '@/store/main';
+
+const mainStore = useMainStore();
 </script>
 
 <style lang="scss">

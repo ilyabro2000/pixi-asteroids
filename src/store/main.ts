@@ -40,9 +40,11 @@ const useMainStore = defineStore('main', () => {
         setPopup(Popup.NULL);
         break;
       case GameState.GAME_OVER_WIN:
+        Emitter.emit(events.SET_WIN);
         setPopup(Popup.GAME_OVER_WIN);
         break;
       case GameState.GAME_OVER_LOSE:
+        Emitter.emit(events.SET_LOSE);
         setPopup(Popup.GAME_OVER_LOSE);
         break;
       default:
@@ -56,6 +58,8 @@ const useMainStore = defineStore('main', () => {
   // };
 
   const setDamage = () => {
+    if (healthPoints.value <= 0) return;
+
     healthPoints.value -= 1;
 
     if (healthPoints.value <= 0) {
@@ -75,7 +79,7 @@ const useMainStore = defineStore('main', () => {
     setScore(value);
   });
 
-  Emitter.on(events.SET_DAMAGE, () => {
+  Emitter.on(events.PLAYER_DAMAGED, () => {
     setDamage();
   });
 
