@@ -6,6 +6,7 @@ export interface AppScreen extends Container {
   pause?(): Promise<void>;
   resume?(): Promise<void>;
   reset?(): void;
+  prepare?(): void;
   update?(delta: number): void;
   resize?(width: number, height: number): void;
   setInteractiveChildren?(value: boolean): void;

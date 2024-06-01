@@ -1,4 +1,4 @@
-import { Container, Ticker } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { pool } from '@/game/pool/MultiPool';
 import app from '@/game/app';
 import { areBundlesLoaded, loadBundles } from '@/game/assets';
@@ -20,17 +20,9 @@ class Navigation {
 
     this.container.addChild(scene);
 
-    if (scene.prepare) {
-      scene.prepare();
-    }
-
-    if (scene.resize) {
-      scene.resize(this.width, this.height);
-    }
-
-    if (scene.update) {
-      Ticker.shared.add(scene.update, scene);
-    }
+    scene?.prepare();
+    scene?.resize(this.width, this.height);
+    scene?.update();
 
     if (scene.show) {
       scene.interactiveChildren = false;

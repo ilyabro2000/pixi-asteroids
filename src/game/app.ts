@@ -5,7 +5,7 @@ import { initAssets } from '@/game/assets';
 import { navigation } from '@/game/navigation';
 import GameScene from '@/game/GameScene';
 
-class App extends Application<HTMLCanvasElement> {
+class App extends Application {
   constructor() {
     super({
       resolution: Math.max(window.devicePixelRatio, 2),

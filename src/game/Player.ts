@@ -1,23 +1,27 @@
 import {
-  Container, Sprite, Texture, Ticker,
+  Container, Sprite, Texture,
 } from 'pixi.js';
 import Victor from 'victor';
 import { clamp } from '@/utils';
 import Input from '@/game/Input';
 import { Actions } from '@/types/Input';
+import { Laser } from '@/game/Laser';
+import { pool } from '@/game/pool/MultiPool';
+import Emitter from '@/game/Emitter';
+import Events from '@/types/events';
 
 export class Player extends Container {
-  private static DEFAULT_ACCELERATION = 0.2;
+  private static DEFAULT_ACCELERATION = 0.5;
+
+  private static SHOOT_DELAY = 100;
 
   private static WIDTH = 40;
 
   private static HEIGHT = 40;
 
-  private static FRICTION_WEIGHT = 0.05;
+  private static FRICTION_WEIGHT = 0.04;
 
-  private static MAX_SPEED = 4;
-
-  private readonly bounds: Sprite;
+  private static MAX_SPEED = 7;
 
   private readonly texture: Texture;
 
@@ -31,6 +35,8 @@ export class Player extends Container {
 
   private velocity = Victor(0, 0);
 
+  private shootCD = false;
+
   constructor() {
     super();
 
@@ -41,24 +47,28 @@ export class Player extends Container {
     this.sprite.height = Player.HEIGHT;
     this.position.set(window.innerWidth / 2, window.innerHeight / 2);
 
-    this.bounds = Sprite.from(Texture.WHITE);
-    this.bounds.anchor.set(0.5);
-    this.bounds.alpha = 0.1;
-    this.bounds.width = Player.WIDTH - 10;
-    this.bounds.height = Player.HEIGHT - 7;
-
     this.addChild(this.sprite);
-    this.addChild(this.bounds);
-
-    Ticker.shared.add(this.update, this);
   }
 
-  public update(delta: number) {
-    // this.handleInput();
-    this.handleMovement(delta);
+  public update(deltaTime: number) {
+    this.handleInput();
+    this.handleMovement(deltaTime);
   }
 
-  handleMovement({ deltaTime } : { number }) {
+  private handleInput() {
+    if (Input.isActionPressed(Actions.SHOOT)) {
+      if (!this.shootCD) {
+        this.shootCD = true;
+
+        this.shootLasers();
+        setTimeout(() => {
+          this.shootCD = false;
+        }, Player.SHOOT_DELAY);
+      }
+    }
+  }
+
+  handleMovement(dt: number) {
     this.inputVector = Victor(0, 0);
     this.rotationDirection = 0;
 
@@ -69,7 +79,7 @@ export class Player extends Container {
       this.rotationDirection = -1;
 
       if (this.inputVector.y === 0) {
-        this.inputVector.y += 0.2;
+        this.inputVector.y += 0.5;
       }
     }
 
@@ -77,13 +87,13 @@ export class Player extends Container {
       this.rotationDirection = 1;
 
       if (this.inputVector.y === 0) {
-        this.inputVector.y += 0.2;
+        this.inputVector.y += 0.5;
       }
     }
 
     const accelerationVector = Victor(
       0,
-      -this.inputVector.y * Player.DEFAULT_ACCELERATION * deltaTime,
+      -this.inputVector.y * Player.DEFAULT_ACCELERATION * dt,
     )
       .rotate(this.rotation);
 
@@ -103,9 +113,17 @@ export class Player extends Container {
       }
     }
 
-    this.rotation += this.rotationDirection * this.rotationSpeed * deltaTime;
+    this.rotation += this.rotationDirection * this.rotationSpeed * dt;
 
-    this.position.x = clamp(this.position.x + this.velocity.x * deltaTime, 0, window.innerWidth);
-    this.position.y = clamp(this.position.y + this.velocity.y * deltaTime, 0, window.innerHeight);
+    this.position.x = clamp(this.position.x + this.velocity.x * dt, 0, window.innerWidth);
+    this.position.y = clamp(this.position.y + this.velocity.y * dt, 0, window.innerHeight);
+  }
+
+  shootLasers() {
+    const laser = pool.get(Laser);
+    laser.rotation = this.rotation;
+    laser.position.set(this.position.x, this.position.y);
+
+    Emitter.emit(Events.LASER_SHOT, laser);
   }
 }

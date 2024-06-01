@@ -4,6 +4,7 @@ enum Events {
   SET_PAUSE = 'SET_PAUSE',
   SET_WIN = 'SET_WIN',
   SET_LOSE = 'SET_LOSE',
+  LASER_SHOT = 'LASER_SHOT',
 }
 
 export default Events;

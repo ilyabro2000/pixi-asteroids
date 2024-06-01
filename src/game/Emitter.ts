@@ -1,4 +1,4 @@
-import { utils } from 'pixi.js';
+import * as utils from '@pixi/utils';
 
 const eventEmitter = new utils.EventEmitter();
 
