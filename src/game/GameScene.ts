@@ -10,7 +10,8 @@ import gsap from 'gsap';
 import { Asteroid } from '@/game/Asteroid';
 import { checkCollision, getBound } from '@/game/collision';
 import { sleep } from '@/utils/sleep';
-import { pauseTweens } from '@/utils/animations';
+import { AsteroidExplosion } from '@/game/AsteroidExplosion';
+import { Colors } from '@/types/Colors';
 
 export class GameScene extends Container {
   public readonly gameContainer = new Container();
@@ -18,6 +19,8 @@ export class GameScene extends Container {
   public readonly lasersContainer = new Container();
 
   public readonly asteroidsContainer = new Container();
+
+  public readonly gameEffectsContainer = new Container();
 
   private player: Player;
 
@@ -28,6 +31,7 @@ export class GameScene extends Container {
     this.player = pool.get(Player);
 
     Emitter.on(Events.LASER_SHOT, this.onLaserShoot.bind(this));
+    Emitter.on(Events.ASTEROID_DESTROYED, (position) => this.initSmallAsteroids(position));
 
     Emitter.on(Events.SET_WIN, this.setWin.bind(this));
     Emitter.on(Events.SET_LOSE, this.setLose.bind(this));
@@ -38,8 +42,9 @@ export class GameScene extends Container {
     this.gameContainer.addChild(this.lasersContainer);
     this.gameContainer.addChild(this.asteroidsContainer);
     this.gameContainer.addChild(this.player);
+    this.gameContainer.addChild(this.gameEffectsContainer);
 
-    this.initAsteroidsManager();
+    this.initAsteroids();
 
     Ticker.shared.add(this.update, this);
   }
@@ -54,10 +59,6 @@ export class GameScene extends Container {
 
   public reset() {
     //
-  }
-
-  public resize(width: number, height: number) {
-
   }
 
   public update(ticker: Ticker) {
@@ -83,7 +84,7 @@ export class GameScene extends Container {
     this.lasersContainer.addChild(laser);
   }
 
-  initAsteroidsManager() {
+  initAsteroids() {
     (new Array(this.asteroidsMaxCount)).fill(0).forEach(async () => {
       const asteroid = pool.get(Asteroid);
       await sleep(Math.random() * 7000);
@@ -92,12 +93,63 @@ export class GameScene extends Container {
     });
   }
 
-  private checkCollisions() {
-    this.asteroidsContainer.children.forEach((asteroid: Asteroid) => {
-      if (checkCollision(getBound(asteroid), getBound(this.player))) {
-        this.player.getDamage();
-      }
+  initSmallAsteroids(position: { x: number, y: number }) {
+    (new Array(2)).fill(0).forEach(async () => {
+      const asteroid = pool.get(Asteroid);
+      await sleep(Math.random() * 400);
+      asteroid.initSmall(position);
+      this.asteroidsContainer.addChild(asteroid);
     });
+  }
+
+  private checkCollisions() {
+    this.checkAsteroidsCollisions();
+  }
+
+  private checkAsteroidsCollisions() {
+    this.asteroidsContainer.children.forEach((asteroid: Asteroid) => {
+      if (checkCollision(asteroid.bounds, getBound(this.player))) {
+        this.player.getDamage();
+
+        this.playAsteroidExplosion(
+          { x: asteroid.x, y: asteroid.y },
+          asteroid.color,
+          asteroid.shapeSize,
+        );
+
+        asteroid.destroy(false);
+      }
+
+      this.lasersContainer.children.forEach((laser: Laser) => {
+        if (checkCollision(getBound(laser), asteroid.bounds)) {
+          laser.destroy();
+
+          this.playAsteroidExplosion(
+            { x: asteroid.x, y: asteroid.y },
+            asteroid.color,
+            asteroid.shapeSize,
+          );
+
+          asteroid.destroy(true);
+        }
+      });
+    });
+  }
+
+  private async playAsteroidExplosion(
+    position: { x: number; y: number },
+    color: Colors,
+    size: number,
+  ) {
+    const explosion = pool.get(AsteroidExplosion);
+    explosion.x = position.x;
+    explosion.y = position.y;
+
+    this.gameEffectsContainer.addChild(explosion);
+    await explosion.play(color, size);
+
+    this.gameEffectsContainer.removeChild(explosion);
+    pool.giveBack(explosion);
   }
 
   setWin() {

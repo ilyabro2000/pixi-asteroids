@@ -1,6 +1,13 @@
-import { Container, Texture, Sprite } from 'pixi.js';
+import {
+  Container, Texture, Sprite,
+} from 'pixi.js';
 import Victor from 'victor';
-import { randomRange } from '@/utils/random';
+import { randomItem, randomRange } from '@/utils/random';
+import { pool } from '@/game/pool/MultiPool';
+import Emitter from '@/game/Emitter';
+import Events from '@/types/events';
+import { IBound } from '@/game/collision';
+import { Colors } from '@/types/Colors';
 
 const TEXTURES_NAMES = [
   'meteor_detailedLarge',
@@ -11,22 +18,28 @@ const TEXTURES_NAMES = [
   'meteor_squareLarge',
 ];
 
-enum TYPE {
+enum AsteroidSizeType {
   SMALL = 'SMALL',
   MEDIUM = 'MEDIUM',
   LARGE = 'LARGE',
 }
 
 const SIZES = Object.freeze({
-  [TYPE.SMALL]: 70,
-  [TYPE.MEDIUM]: 130,
-  [TYPE.LARGE]: 100,
+  [AsteroidSizeType.SMALL]: 30,
+  [AsteroidSizeType.MEDIUM]: 60,
+  [AsteroidSizeType.LARGE]: 80,
 });
 
 const SPEEDS = Object.freeze({
-  [TYPE.SMALL]: 3,
-  [TYPE.MEDIUM]: 2,
-  [TYPE.LARGE]: 1,
+  [AsteroidSizeType.SMALL]: 3,
+  [AsteroidSizeType.MEDIUM]: 2,
+  [AsteroidSizeType.LARGE]: 1,
+});
+
+const COLORS = Object.freeze({
+  [AsteroidSizeType.SMALL]: Colors.SMALL_ASTEROID,
+  [AsteroidSizeType.MEDIUM]: Colors.MEDIUM_ASTEROID,
+  [AsteroidSizeType.LARGE]: Colors.LARGE_ASTEROID,
 });
 
 export class Asteroid extends Container {
@@ -38,7 +51,7 @@ export class Asteroid extends Container {
 
   private speed = 1;
 
-  private size: TYPE = TYPE.SMALL;
+  private size: AsteroidSizeType = AsteroidSizeType.SMALL;
 
   private rotationDirection = 0;
 
@@ -54,6 +67,8 @@ export class Asteroid extends Container {
   }
 
   init() {
+    this.setTypeParams(randomItem(AsteroidSizeType));
+
     const edge = Math.floor(Math.random() * 4);
     let startX = 0;
     let startY = 0;
@@ -85,10 +100,6 @@ export class Asteroid extends Container {
     const targetY = randomRange(-window.innerHeight, window.innerHeight);
     this.movementVector = new Victor(targetX - startX, targetY - startY).normalize();
 
-    this.speed = SPEEDS[this.size];
-    this.sprite.width = SIZES[this.size];
-    this.sprite.height = SIZES[this.size];
-
     this.rotationDirection = randomRange(-0.02, 0.02);
   }
 
@@ -107,5 +118,49 @@ export class Asteroid extends Container {
     ) {
       this.init();
     }
+  }
+
+  private setTypeParams(size: AsteroidSizeType) {
+    this.size = size;
+    this.sprite.width = SIZES[size];
+    this.sprite.height = SIZES[size];
+    this.speed = SPEEDS[size];
+    this.sprite.tint = COLORS[size];
+  }
+
+  public initSmall(position: { x: number, y: number }) {
+    this.setTypeParams(AsteroidSizeType.SMALL);
+    this.movementVector = new Victor(Math.random() - 0.5, Math.random() - 0.5).normalize();
+    this.position.set(position.x, position.y);
+  }
+
+  public destroy(withScore = false) {
+    if (withScore && this.size === AsteroidSizeType.SMALL) {
+      Emitter.emit(Events.SET_SCORE, 10);
+    }
+
+    if (this.size !== AsteroidSizeType.SMALL) {
+      Emitter.emit(Events.ASTEROID_DESTROYED, { x: this.position.x, y: this.position.y });
+    }
+
+    pool.giveBack(this);
+    this.init();
+  }
+
+  get bounds(): IBound {
+    return {
+      left: this.position.x,
+      right: this.position.x + this.sprite.width,
+      top: this.position.y,
+      bottom: this.position.y + this.sprite.height,
+    };
+  }
+
+  get color() {
+    return this.sprite.tint;
+  }
+
+  get shapeSize(): number {
+    return this.sprite.width;
   }
 }

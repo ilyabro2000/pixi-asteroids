@@ -10,11 +10,12 @@ import { pool } from '@/game/pool/MultiPool';
 import Emitter from '@/game/Emitter';
 import Events from '@/types/events';
 import gsap from 'gsap';
+import { Colors } from '@/types/Colors';
 
 export class Player extends Container {
   private static DEFAULT_ACCELERATION = 0.5;
 
-  private static SHOOT_DELAY = 100;
+  private static SHOOT_DELAY = 220;
 
   private static BACK_MOVE_KOEF = 0.5;
 
@@ -50,7 +51,7 @@ export class Player extends Container {
     this.sprite.anchor.set(0.5);
     this.sprite.width = Player.WIDTH;
     this.sprite.height = Player.HEIGHT;
-    this.sprite.tint = 'FF6500';
+    this.sprite.tint = Colors.PLAYER;
     this.position.set(window.innerWidth / 2, window.innerHeight / 2);
 
     this.addChild(this.sprite);

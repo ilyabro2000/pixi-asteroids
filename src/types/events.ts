@@ -6,6 +6,7 @@ enum Events {
   SET_LOSE = 'SET_LOSE',
   LASER_SHOT = 'LASER_SHOT',
   PLAYER_DAMAGED = 'PLAYER_DAMAGED',
+  ASTEROID_DESTROYED = 'ASTEROID_DESTROYED',
 }
 
 export default Events;

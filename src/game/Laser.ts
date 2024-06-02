@@ -44,4 +44,9 @@ export class Laser extends Container {
       this.removeFromParent();
     }
   }
+
+  public destroy() {
+    pool.giveBack(this);
+    this.removeFromParent();
+  }
 }

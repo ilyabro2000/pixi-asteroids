@@ -1,6 +1,6 @@
 import { Container } from 'pixi.js';
 
-interface IBound {
+export interface IBound {
   top: number
   right: number
   bottom: number
@@ -27,7 +27,13 @@ const checkCollision = (a: IBound, b: IBound): number => {
 
 const getBound = ({
   x, y, width, height,
-}: Container): IBound => ({
+}: {
+  x: number
+  y: number
+  width: number
+  height: number
+
+}): IBound => ({
   top: y,
   right: x + width,
   bottom: y + height,
