@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "preview": "npm run build && vite preview --open",
-    "dev": "npm run vite",
+    "dev": "vite",
     "assets": "assetpack -c .assetpack.js",
     "clean": "node cmds.js clean"
   },

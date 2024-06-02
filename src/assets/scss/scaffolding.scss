@@ -55,9 +55,9 @@ html, body {
   }
 }
 
-html {
+html, body {
   background: $color-main;
-  color: $color-additional;
+  color: $color-white;
 }
 
 #app {
