@@ -20,7 +20,7 @@ export class Laser extends Container {
   constructor() {
     super();
 
-    this.texture = Texture.from('effect_purple');
+    this.texture = Texture.from('effect_yellow');
     this.sprite = Sprite.from(this.texture);
     this.sprite.anchor.set(0.5);
     this.sprite.width = Laser.WIDTH;

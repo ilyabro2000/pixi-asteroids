@@ -41,6 +41,7 @@ const useMainStore = defineStore('main', () => {
         stopTimer();
         break;
       case GameState.GAME:
+        isWin.value = false;
         setPopup(Popup.NULL);
         Emitter.emit(events.RESUME_GAME);
         resumeTimer();
@@ -123,7 +124,6 @@ const useMainStore = defineStore('main', () => {
   const resetTimer = () => {
     time.value = INITIAL_TIME;
     stopTimer();
-    initTimer(INITIAL_TIME);
   };
 
   const resumeTimer = () => {
@@ -136,6 +136,8 @@ const useMainStore = defineStore('main', () => {
     score.value = 0;
 
     Emitter.emit(events.RESTART_GAME);
+
+    setGameState(GameState.GAME);
   };
 
   return {
@@ -150,6 +152,7 @@ const useMainStore = defineStore('main', () => {
     bestScore,
     timerId,
     isStartScreenWatched,
+    isWin,
     restartGame,
     togglePopup,
     setPopup,

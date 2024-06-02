@@ -2,8 +2,8 @@ import {
   Application,
 } from 'pixi.js';
 import { initAssets } from '@/game/assets';
-import { navigation } from '@/game/navigation';
 import GameScene from '@/game/GameScene';
+import { pool } from '@/game/pool/MultiPool';
 
 class App extends Application {
   constructor() {
@@ -28,21 +28,13 @@ class App extends Application {
     });
     target?.appendChild(this.canvas);
 
-    window.addEventListener('resize', this.handleResize.bind(this));
-
     await initAssets();
 
-    await navigation.showScene(GameScene);
+    const gameScene = pool.get(GameScene);
+    gameScene.prepare();
+    this.stage.addChild(gameScene);
 
-    this.handleResize();
-  }
-
-  handleResize() {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-
-    window.scrollTo(0, 0);
-    navigation.resize(windowWidth, windowHeight);
+    await gameScene.show();
   }
 }
 

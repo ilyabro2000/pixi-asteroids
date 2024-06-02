@@ -11,33 +11,10 @@
         name="fade"
         appear
       >
-        <div
-          v-show="!isPopupOpened"
+        <ScoreMain
+          v-if="!isPopupOpened"
           class="game-ui__scores"
-        >
-          <div class="game-ui__row">
-            <p>Тeкущий:</p>
-            <transition
-              name="scale-in"
-              mode="out-in"
-            >
-              <p :key="score">
-                {{ score }}
-              </p>
-            </transition>
-          </div>
-          <div class="game-ui__row">
-            <p>Лучший:</p>
-            <transition
-              name="scale-in"
-              mode="out-in"
-            >
-              <p :key="bestScore">
-                {{ bestScore }}
-              </p>
-            </transition>
-          </div>
-        </div>
+        />
       </transition>
 
       <div
@@ -82,11 +59,16 @@ import { computed } from 'vue';
 import CommonButton from '@/components/CommonButton.vue';
 import PauseIcon from '@/components/icons/StopIcon.vue';
 import hpImage from '@/assets/images/hp.png';
+import ScoreMain from '@/components/ScoreMain.vue';
 
 const mainStore = useMainStore();
 
 const {
-  score, time, bestScore, timerId, isPopupOpened, isStartScreenWatched, healthPoints,
+  time,
+  timerId,
+  isPopupOpened,
+  isStartScreenWatched,
+  healthPoints,
 } = storeToRefs(mainStore);
 
 const transformTimer = computed(() => `translateX(${time.value / 60 * 100}%)`);
@@ -137,18 +119,7 @@ const transformTimer = computed(() => `translateX(${time.value / 60 * 100}%)`);
   }
 
   &__scores {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-transform: uppercase;
-  }
-
-  &__row{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-width: 20rem;
-    gap: 1rem;
+    width: 20rem;
   }
 
   svg {

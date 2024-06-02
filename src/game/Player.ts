@@ -52,9 +52,15 @@ export class Player extends Container {
     this.sprite.width = Player.WIDTH;
     this.sprite.height = Player.HEIGHT;
     this.sprite.tint = Colors.PLAYER;
-    this.position.set(window.innerWidth / 2, window.innerHeight / 2);
 
+    this.init();
     this.addChild(this.sprite);
+  }
+
+  init() {
+    this.position.set(window.innerWidth / 2, window.innerHeight / 2);
+    this.rotation = Math.PI * 2;
+    this.velocity = Victor(0, 0);
   }
 
   public update(deltaTime: number) {

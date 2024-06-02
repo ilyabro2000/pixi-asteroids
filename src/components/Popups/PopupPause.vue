@@ -4,27 +4,7 @@
       Пауза
     </div>
 
-    <div class="popup-pause__info">
-      <div class="popup-pause__info-item">
-        <p class="popup-pause__info-item-title">
-          Лучший счет:
-        </p>
-
-        <p class="popup-pause__info-item-value">
-          {{ bestScore }}
-        </p>
-      </div>
-
-      <div class="popup-pause__info-item">
-        <p class="popup-pause__info-item-title">
-          Текущий счет:
-        </p>
-
-        <p class="popup-pause__info-item-value">
-          {{ score }}
-        </p>
-      </div>
-    </div>
+    <ScoreMain class="popup-pause__info" />
 
     <div class="popup-pause__buttons">
       <CommonButton
@@ -47,12 +27,10 @@
 
 <script setup lang="ts">
 import { useMainStore } from '@/store/main';
-import { storeToRefs } from 'pinia';
 import CommonButton from '@/components/CommonButton.vue';
+import ScoreMain from '@/components/ScoreMain.vue';
 
 const mainStore = useMainStore();
-
-const { score, bestScore } = storeToRefs(mainStore);
 </script>
 
 <style lang="scss" scoped>
@@ -73,25 +51,7 @@ const { score, bestScore } = storeToRefs(mainStore);
   }
 
   &__info {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
     width: 100%;
-
-    &-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    &-item-title {
-      font-size: 2rem;
-    }
-
-    &-item-value {
-      font-size: 2rem;
-    }
   }
 
   &__buttons {

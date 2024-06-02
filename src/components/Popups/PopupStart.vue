@@ -93,6 +93,7 @@ import CommonButton from '@/components/CommonButton.vue';
 import { GameState } from '@/types/Game';
 import { useMainStore } from '@/store/main';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
 const mainStore = useMainStore();
 
@@ -102,6 +103,10 @@ const handelStartClick = () => {
   mainStore.setGameState(GameState.GAME);
   isStartScreenWatched.value = true;
 };
+
+onMounted(() => {
+  isStartScreenWatched.value = false;
+});
 </script>
 
 <style lang="scss" scoped>

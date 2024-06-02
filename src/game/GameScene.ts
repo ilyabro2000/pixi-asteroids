@@ -62,11 +62,14 @@ export class GameScene extends Container {
   }
 
   public reset() {
-    //
-  }
-
-  public resize(width: number, height: number) {
-    //
+    this.lasersContainer.children.forEach((laser: Laser) => pool.giveBack(laser));
+    this.lasersContainer.removeChildren();
+    this.asteroidsContainer.children.forEach((asteroid: Asteroid) => pool.giveBack(asteroid));
+    this.asteroidsContainer.removeChildren();
+    this.gameEffectsContainer.children.forEach((effect: AsteroidExplosion) => pool.giveBack(effect));
+    this.gameEffectsContainer.removeChildren();
+    this.initAsteroids();
+    this.player.init();
   }
 
   public update(ticker: Ticker) {
