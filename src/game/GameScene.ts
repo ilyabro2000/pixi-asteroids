@@ -35,6 +35,9 @@ export class GameScene extends Container {
 
     Emitter.on(Events.SET_WIN, this.setWin.bind(this));
     Emitter.on(Events.SET_LOSE, this.setLose.bind(this));
+
+    Emitter.on(Events.SET_PAUSE, this.pause.bind(this));
+    Emitter.on(Events.RESUME_GAME, this.resume.bind(this));
   }
 
   public prepare() {
@@ -58,6 +61,10 @@ export class GameScene extends Container {
   }
 
   public reset() {
+    //
+  }
+
+  public resize(width: number, height: number) {
     //
   }
 

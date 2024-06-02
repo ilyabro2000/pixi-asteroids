@@ -30,6 +30,12 @@ const SIZES = Object.freeze({
   [AsteroidSizeType.LARGE]: 80,
 });
 
+const COLLISION_SIZE = Object.freeze({
+  [AsteroidSizeType.SMALL]: 20,
+  [AsteroidSizeType.MEDIUM]: 32,
+  [AsteroidSizeType.LARGE]: 50,
+});
+
 const SPEEDS = Object.freeze({
   [AsteroidSizeType.SMALL]: 3,
   [AsteroidSizeType.MEDIUM]: 2,
@@ -150,9 +156,9 @@ export class Asteroid extends Container {
   get bounds(): IBound {
     return {
       left: this.position.x,
-      right: this.position.x + this.sprite.width,
+      right: COLLISION_SIZE[this.size] + this.position.x,
       top: this.position.y,
-      bottom: this.position.y + this.sprite.height,
+      bottom: COLLISION_SIZE[this.size] + this.position.y,
     };
   }
 

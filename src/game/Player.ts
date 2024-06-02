@@ -86,7 +86,7 @@ export class Player extends Container {
       this.rotationDirection = -1;
 
       if (this.inputVector.y === 0) {
-        this.inputVector.y += 0.5;
+        this.inputVector.y += 0.5 * dt;
       }
     }
 
@@ -94,7 +94,7 @@ export class Player extends Container {
       this.rotationDirection = 1;
 
       if (this.inputVector.y === 0) {
-        this.inputVector.y += 0.5;
+        this.inputVector.y += 0.5 * dt;
       }
     }
 
