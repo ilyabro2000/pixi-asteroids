@@ -78,7 +78,7 @@
     <CommonButton
       text="Начать игру"
       class="popup-start__button"
-      @click="mainStore.setGameState(GameState.GAME)"
+      @click="handelStartClick"
     >
       Погнали!
     </CommonButton>
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import KeycapIcon from '@/components/KeycapIcon.vue';
+import KeycapIcon from '@/components/icons/KeycapIcon.vue';
 import { CONTROLS_TEXTS, GAME_TEXTS, TUTORIAL_TEXTS_IDS } from '@/types/Tutorial';
 import hpImage from '@/assets/images/hp.png';
 import CommonButton from '@/components/CommonButton.vue';
@@ -96,7 +96,12 @@ import { storeToRefs } from 'pinia';
 
 const mainStore = useMainStore();
 
-const { popupState } = storeToRefs(mainStore);
+const { isStartScreenWatched } = storeToRefs(mainStore);
+
+const handelStartClick = () => {
+  mainStore.setGameState(GameState.GAME);
+  isStartScreenWatched.value = true;
+};
 </script>
 
 <style lang="scss" scoped>

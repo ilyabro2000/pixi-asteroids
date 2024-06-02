@@ -81,6 +81,7 @@ const currentComponent = computed(() => {
       height: 98%;
       border-radius: .5rem;
       border: 0.2rem solid $color-additional;
+      pointer-events: none;
     }
   }
 }

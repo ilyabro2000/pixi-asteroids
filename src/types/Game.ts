@@ -7,10 +7,10 @@ enum GameState {
 
 const DEFAULT_HEALTH_COUNT = 3;
 
-const SCORE_GOAL = 1000;
+const INITIAL_TIME = 60;
 
 export {
   GameState,
   DEFAULT_HEALTH_COUNT,
-  SCORE_GOAL,
+  INITIAL_TIME,
 };

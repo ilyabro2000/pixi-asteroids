@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { DEFAULT_HEALTH_COUNT, GameState, SCORE_GOAL } from '@/types/Game';
+import { DEFAULT_HEALTH_COUNT, GameState, INITIAL_TIME } from '@/types/Game';
 import { Popup } from '@/types/Popup';
 import Emitter from '@/game/Emitter';
 import events from '@/types/events';
@@ -11,6 +11,10 @@ const useMainStore = defineStore('main', () => {
   const gameState = ref(GameState.PAUSE);
   const popupState = ref(Popup.NULL);
   const isWin = ref(false);
+  const time = ref(INITIAL_TIME);
+  const timerId = ref(0);
+  const bestScore = ref(0);
+  const isStartScreenWatched = ref(false);
 
   const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 0);
   const isMobile = computed(() => windowWidth.value < 729);
@@ -18,11 +22,6 @@ const useMainStore = defineStore('main', () => {
 
   window.addEventListener('resize', () => {
     windowWidth.value = window.innerWidth;
-  });
-
-  const goalScore = computed(() => {
-    const goal = SCORE_GOAL - score.value;
-    return goal > 0 ? score : 0;
   });
 
   const setPopup = (popup: Popup) => {
@@ -39,19 +38,26 @@ const useMainStore = defineStore('main', () => {
       case GameState.PAUSE:
         setPopup(Popup.PAUSE);
         Emitter.emit(events.SET_PAUSE);
+        stopTimer();
         break;
       case GameState.GAME:
         setPopup(Popup.NULL);
         Emitter.emit(events.RESUME_GAME);
+        resumeTimer();
         break;
       case GameState.GAME_OVER_WIN:
         isWin.value = true;
         Emitter.emit(events.SET_WIN);
         setPopup(Popup.GAME_OVER);
+
+        if (score.value > bestScore.value) {
+          bestScore.value = score.value;
+        }
         break;
       case GameState.GAME_OVER_LOSE:
         Emitter.emit(events.SET_LOSE);
         setPopup(Popup.GAME_OVER);
+        stopTimer();
         break;
       default:
         break;
@@ -61,6 +67,14 @@ const useMainStore = defineStore('main', () => {
   const closePopup = () => {
     popupState.value = Popup.NULL;
     setGameState(GameState.GAME);
+  };
+
+  const togglePopup = () => {
+    if (isPopupOpened.value) {
+      closePopup();
+      return;
+    }
+    setGameState(GameState.PAUSE);
   };
 
   const setDamage = () => {
@@ -75,10 +89,6 @@ const useMainStore = defineStore('main', () => {
 
   const setScore = (value: number) => {
     score.value += value;
-
-    if (goalScore.value <= 0) {
-      setGameState(GameState.GAME_OVER_WIN);
-    }
   };
 
   Emitter.on(events.SET_SCORE, (value: number) => {
@@ -89,15 +99,59 @@ const useMainStore = defineStore('main', () => {
     setDamage();
   });
 
+  const initTimer = (value: number) => {
+    if (!timerId.value) {
+      time.value = value;
+    }
+
+    timerId.value = setInterval(() => {
+      time.value -= 1;
+
+      if (time.value <= 0) {
+        clearInterval(timerId.value);
+        setGameState(GameState.GAME_OVER_WIN);
+      }
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    if (timerId.value) {
+      clearInterval(timerId.value);
+    }
+  };
+
+  const resetTimer = () => {
+    time.value = INITIAL_TIME;
+    stopTimer();
+    initTimer(INITIAL_TIME);
+  };
+
+  const resumeTimer = () => {
+    initTimer(time.value);
+  };
+
+  const restartGame = () => {
+    resetTimer();
+    healthPoints.value = DEFAULT_HEALTH_COUNT;
+    score.value = 0;
+
+    Emitter.emit(events.RESTART_GAME);
+  };
+
   return {
     windowWidth,
     isMobile,
-    goalScore,
     healthPoints,
     score,
     gameState,
     popupState,
     isPopupOpened,
+    time,
+    bestScore,
+    timerId,
+    isStartScreenWatched,
+    restartGame,
+    togglePopup,
     setPopup,
     closePopup,
     setScore,

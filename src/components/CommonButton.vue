@@ -4,9 +4,7 @@
     type="button"
     @click="onButtonClick"
   >
-    <span>
-      <slot />
-    </span>
+    <slot />
   </button>
 </template>
 

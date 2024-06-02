@@ -38,6 +38,7 @@ export class GameScene extends Container {
 
     Emitter.on(Events.SET_PAUSE, this.pause.bind(this));
     Emitter.on(Events.RESUME_GAME, this.resume.bind(this));
+    Emitter.on(Events.RESTART_GAME, this.reset.bind(this));
   }
 
   public prepare() {

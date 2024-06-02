@@ -48,3 +48,12 @@
   transform: translateX(100%);
   opacity: 0;
 }
+
+//scale-in
+.scale-in-enter-active {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.3, 1);
+}
+
+.scale-in-enter, .scale-in-leave-to, .scale-in-enter-from {
+  transform: scale(.7);
+}

@@ -30,7 +30,7 @@ onMounted(async () => {
   await nextTick();
   await app.start(targetEl.value);
 
-  await sleep(3000);
+  await sleep(500);
   mainStore.setPopup(Popup.START);
 });
 </script>
