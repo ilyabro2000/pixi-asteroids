@@ -11,7 +11,6 @@ import { Asteroid } from '@/game/Asteroid';
 import { checkCollision, getBound } from '@/game/collision';
 import { sleep } from '@/utils/sleep';
 import { AsteroidExplosion } from '@/game/AsteroidExplosion';
-import { Colors } from '@/types/Colors';
 
 export class GameScene extends Container {
   public readonly gameContainer = new Container();
@@ -62,12 +61,22 @@ export class GameScene extends Container {
   }
 
   public reset() {
-    this.lasersContainer.children.forEach((laser: Laser) => pool.giveBack(laser));
+    this.lasersContainer.children.forEach((laserEl) => {
+      const laser = laserEl as Laser;
+      pool.giveBack(laser);
+    });
     this.lasersContainer.removeChildren();
-    this.asteroidsContainer.children.forEach((asteroid: Asteroid) => pool.giveBack(asteroid));
+    this.asteroidsContainer.children.forEach((asteroidEl) => {
+      const asteroid = asteroidEl as Asteroid;
+      pool.giveBack(asteroid);
+    });
     this.asteroidsContainer.removeChildren();
-    this.gameEffectsContainer.children.forEach((effect: AsteroidExplosion) => pool.giveBack(effect));
+    this.gameEffectsContainer.children.forEach((effectEl) => {
+      const effect = effectEl as AsteroidExplosion;
+      pool.giveBack(effect);
+    });
     this.gameEffectsContainer.removeChildren();
+
     this.initAsteroids();
     this.player.init();
   }
@@ -76,11 +85,14 @@ export class GameScene extends Container {
     if (!ticker) return;
 
     this.player.update(ticker.deltaTime);
-    this.lasersContainer.children.forEach((laser: Laser) => {
+
+    this.lasersContainer.children.forEach((laserEl) => {
+      const laser = laserEl as Laser;
       laser.update(ticker.deltaTime);
     });
 
-    this.asteroidsContainer.children.forEach((asteroid: Asteroid) => {
+    this.asteroidsContainer.children.forEach((asteroidEl) => {
+      const asteroid = asteroidEl as Asteroid;
       asteroid.update(ticker.deltaTime);
     });
 
@@ -118,7 +130,8 @@ export class GameScene extends Container {
   }
 
   private checkAsteroidsCollisions() {
-    this.asteroidsContainer.children.forEach((asteroid: Asteroid) => {
+    this.asteroidsContainer.children.forEach((asteroidEl) => {
+      const asteroid = asteroidEl as Asteroid;
       if (checkCollision(asteroid.bounds, getBound(this.player))) {
         this.player.getDamage();
 
@@ -131,7 +144,8 @@ export class GameScene extends Container {
         asteroid.destroy(false);
       }
 
-      this.lasersContainer.children.forEach((laser: Laser) => {
+      this.lasersContainer.children.forEach((laserEl) => {
+        const laser = laserEl as Laser;
         if (checkCollision(getBound(laser), asteroid.bounds)) {
           laser.destroy();
 
@@ -149,7 +163,7 @@ export class GameScene extends Container {
 
   private async playAsteroidExplosion(
     position: { x: number; y: number },
-    color: Colors,
+    color: number,
     size: number,
   ) {
     const explosion = pool.get(AsteroidExplosion);

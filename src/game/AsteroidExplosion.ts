@@ -2,9 +2,8 @@ import {
   Container, Sprite, Texture,
 } from 'pixi.js';
 import gsap from 'gsap';
-import { randomItem, randomRange } from '@/utils/random';
+import { randomRange } from '@/utils/random';
 import { resolveAndKillTweens } from '@/utils/animations';
-import { Colors } from '@/types/Colors';
 
 export class AsteroidExplosion extends Container {
   private static particlesCount = 20;
@@ -28,8 +27,8 @@ export class AsteroidExplosion extends Container {
     });
   }
 
-  public async play(color: Colors, size: number) {
-    const animPromises = [];
+  public async play(color: number, size: number) {
+    const animPromises: Promise<void>[] = [];
 
     (new Array(AsteroidExplosion.particlesCount)).fill(null).forEach((_, i) => {
       animPromises.push(this.playParticle(this.particles[i], color, size));
@@ -38,7 +37,7 @@ export class AsteroidExplosion extends Container {
     await Promise.all(animPromises);
   }
 
-  private async playParticle(particle: Sprite, color: Colors, size: number) {
+  private async playParticle(particle: Sprite, color: number, size: number) {
     gsap.killTweensOf(particle);
     gsap.killTweensOf(particle.scale);
 

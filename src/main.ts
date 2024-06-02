@@ -1,10 +1,13 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-// ts-ignore eslint-disable-next-line no-underscore-dangle
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+
+// ts-ignore
 import App from './App.vue';
 
-const app = createApp(App);
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
-app.use(createPinia());
-
-app.mount('#app');
+createApp(App)
+  .use(pinia)
+  .mount('#app');

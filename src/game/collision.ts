@@ -1,5 +1,3 @@
-import { Container } from 'pixi.js';
-
 export interface IBound {
   top: number
   right: number

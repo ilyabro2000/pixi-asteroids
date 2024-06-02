@@ -15,7 +15,7 @@ export class Laser extends Container {
 
   private readonly sprite: Sprite;
 
-  private movementVector = Victor(0, -1);
+  private movementVector = new Victor(0, -1);
 
   constructor() {
     super();

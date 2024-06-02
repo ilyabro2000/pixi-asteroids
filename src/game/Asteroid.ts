@@ -53,7 +53,7 @@ export class Asteroid extends Container {
 
   private sprite: Sprite;
 
-  private movementVector: Victor = Victor(0, 0);
+  private movementVector: Victor = new Victor(0, 0);
 
   private speed = 1;
 
@@ -162,7 +162,7 @@ export class Asteroid extends Container {
     };
   }
 
-  get color() {
+  get color(): number {
     return this.sprite.tint;
   }
 

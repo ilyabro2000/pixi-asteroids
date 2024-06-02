@@ -31,13 +31,13 @@ export class Player extends Container {
 
   private readonly sprite: Sprite;
 
-  private inputVector = Victor(0, 0);
+  private inputVector = new Victor(0, 0);
 
   private rotationDirection = 0;
 
   private rotationSpeed = 0.07;
 
-  private velocity = Victor(0, 0);
+  private velocity = new Victor(0, 0);
 
   private shootCD = false;
 
@@ -60,7 +60,7 @@ export class Player extends Container {
   init() {
     this.position.set(window.innerWidth / 2, window.innerHeight / 2);
     this.rotation = Math.PI * 2;
-    this.velocity = Victor(0, 0);
+    this.velocity = new Victor(0, 0);
   }
 
   public update(deltaTime: number) {
@@ -82,7 +82,7 @@ export class Player extends Container {
   }
 
   handleMovement(dt: number) {
-    this.inputVector = Victor(0, 0);
+    this.inputVector = new Victor(0, 0);
     this.rotationDirection = 0;
 
     this.inputVector.y = Input.getActionStrength(Actions.MOVE_UP)
@@ -104,7 +104,7 @@ export class Player extends Container {
       }
     }
 
-    const accelerationVector = Victor(
+    const accelerationVector = new Victor(
       0,
       -this.inputVector.y * Player.DEFAULT_ACCELERATION * dt * (this.inputVector.y < 0 ? Player.BACK_MOVE_KOEF : 1),
     )
@@ -122,7 +122,7 @@ export class Player extends Container {
       this.velocity.mix(new Victor(0, 0), Player.FRICTION_WEIGHT);
 
       if (this.velocity.magnitude() <= 0.01) {
-        this.velocity = Victor(0, 0);
+        this.velocity = new Victor(0, 0);
       }
     }
 

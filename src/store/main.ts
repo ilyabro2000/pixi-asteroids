@@ -5,6 +5,8 @@ import { Popup } from '@/types/Popup';
 import Emitter from '@/game/Emitter';
 import events from '@/types/events';
 
+const LOCAL_STORAGE_KEY = 'PIXI-ASTEROIDS';
+
 const useMainStore = defineStore('main', () => {
   const score = ref(0);
   const healthPoints = ref(DEFAULT_HEALTH_COUNT);
@@ -12,7 +14,7 @@ const useMainStore = defineStore('main', () => {
   const popupState = ref(Popup.NULL);
   const isWin = ref(false);
   const time = ref(INITIAL_TIME);
-  const timerId = ref(0);
+  const timerId = ref<ReturnType<typeof setTimeout> | null>(null);
   const bestScore = ref(0);
   const isStartScreenWatched = ref(false);
 
@@ -24,10 +26,40 @@ const useMainStore = defineStore('main', () => {
     windowWidth.value = window.innerWidth;
   });
 
+  const initTimer = (value: number) => {
+    if (!timerId.value) {
+      time.value = value;
+    }
+
+    timerId.value = setInterval(() => {
+      time.value -= 1;
+
+      if (time.value <= 0) {
+        clearInterval(timerId.value ?? 0);
+        setGameState(GameState.GAME_OVER_WIN);
+      }
+    }, 1000);
+  };
+
   const setPopup = (popup: Popup) => {
     popupState.value = popup;
 
     Emitter.emit(events.SET_PAUSE, popup !== Popup.NULL);
+  };
+
+  const stopTimer = () => {
+    if (timerId.value) {
+      clearInterval(timerId.value ?? 0);
+    }
+  };
+
+  const resetTimer = () => {
+    time.value = INITIAL_TIME;
+    stopTimer();
+  };
+
+  const resumeTimer = () => {
+    initTimer(time.value);
   };
 
   const setGameState = (state: GameState) => {
@@ -100,36 +132,6 @@ const useMainStore = defineStore('main', () => {
     setDamage();
   });
 
-  const initTimer = (value: number) => {
-    if (!timerId.value) {
-      time.value = value;
-    }
-
-    timerId.value = setInterval(() => {
-      time.value -= 1;
-
-      if (time.value <= 0) {
-        clearInterval(timerId.value);
-        setGameState(GameState.GAME_OVER_WIN);
-      }
-    }, 1000);
-  };
-
-  const stopTimer = () => {
-    if (timerId.value) {
-      clearInterval(timerId.value);
-    }
-  };
-
-  const resetTimer = () => {
-    time.value = INITIAL_TIME;
-    stopTimer();
-  };
-
-  const resumeTimer = () => {
-    initTimer(time.value);
-  };
-
   const restartGame = () => {
     resetTimer();
     healthPoints.value = DEFAULT_HEALTH_COUNT;
@@ -161,6 +163,12 @@ const useMainStore = defineStore('main', () => {
     setDamage,
     setGameState,
   };
+}, {
+  persist: {
+    storage: localStorage,
+    paths: ['bestScore'],
+    key: LOCAL_STORAGE_KEY,
+  },
 });
 
 export {
