@@ -11,6 +11,7 @@ import { Asteroid } from '@/game/Asteroid';
 import { checkCollision, getBound } from '@/game/collision';
 import { sleep } from '@/utils/sleep';
 import { AsteroidExplosion } from '@/game/AsteroidExplosion';
+import { clamp } from '@/utils';
 
 export class GameScene extends Container {
   public readonly gameContainer = new Container();
@@ -38,6 +39,9 @@ export class GameScene extends Container {
     Emitter.on(Events.SET_PAUSE, this.pause.bind(this));
     Emitter.on(Events.RESUME_GAME, this.resume.bind(this));
     Emitter.on(Events.RESTART_GAME, this.reset.bind(this));
+
+    Ticker.minFPS = 60;
+    Ticker.maxFPS = 60;
   }
 
   public prepare() {
@@ -84,16 +88,18 @@ export class GameScene extends Container {
   public update(ticker: Ticker) {
     if (!ticker) return;
 
-    this.player.update(ticker.deltaTime);
+    const clampedDelta = clamp(ticker.deltaTime, 0, 1000 / 60);
+
+    this.player.update(clampedDelta);
 
     this.lasersContainer.children.forEach((laserEl) => {
       const laser = laserEl as Laser;
-      laser.update(ticker.deltaTime);
+      laser.update(clampedDelta);
     });
 
     this.asteroidsContainer.children.forEach((asteroidEl) => {
       const asteroid = asteroidEl as Asteroid;
-      asteroid.update(ticker.deltaTime);
+      asteroid.update(clampedDelta);
     });
 
     this.checkCollisions();

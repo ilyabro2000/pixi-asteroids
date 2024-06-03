@@ -119,7 +119,7 @@ export class Player extends Container {
       .multiplyScalar(Math.min(velocityLength, Player.MAX_SPEED));
 
     if (this.inputVector.x === 0 || this.inputVector.y === 0) {
-      this.velocity.mix(new Victor(0, 0), Player.FRICTION_WEIGHT);
+      this.velocity.mix(new Victor(0, 0), Player.FRICTION_WEIGHT * dt);
 
       if (this.velocity.magnitude() <= 0.01) {
         this.velocity = new Victor(0, 0);

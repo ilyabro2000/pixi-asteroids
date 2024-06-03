@@ -1,8 +1,8 @@
 <template>
   <div :class="classes">
-    <p class="keycap-icon__text">
-      {{ symbol }}
-    </p>
+    <div class="keycap-icon__text">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -11,13 +11,14 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
-  symbol: string;
   isBig?: boolean;
+  color?: 'main' | 'red' | 'gold';
 }>();
 
 const classes = computed(() => [
   'keycap-icon',
   { 'keycap-icon--big': props.isBig },
+  `keycap-icon--${props.color}`,
 ]);
 </script>
 
@@ -34,6 +35,19 @@ const classes = computed(() => [
   border-radius: 0.5rem;
   border-right: 0.4rem solid $ui-secondary;
   border-bottom: 0.4rem solid $ui-secondary;
+
+  &--red {
+    background-color: $color-red;
+    border-right-color: #AD3A10FF;
+    border-bottom-color: #AD3A10FF;
+  }
+
+  &--gold {
+    background-color: $color-gold;
+    border-right-color: #837425FF;
+    border-bottom-color: #837425FF;
+    color: $color-main
+  }
 
   &__text {
     position: absolute;

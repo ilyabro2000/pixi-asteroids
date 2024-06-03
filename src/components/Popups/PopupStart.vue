@@ -14,8 +14,9 @@
             v-for="key in control.keys"
             :key="key"
             :is-big="key === 'space'"
-            :symbol="key"
-          />
+          >
+            {{ key }}
+          </KeycapIcon>
         </div>
 
         <p class="popup-start__controls-text">
