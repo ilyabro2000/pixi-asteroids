@@ -5,18 +5,26 @@
         v-if="!isPopupOpened"
         class="game-ui__health"
       >
-        <KeycapIcon
+        <div
           v-for="point in healthPoints"
           :key="point"
-          color="red"
-          class="game-ui__health-point"
         >
-          <img
-            :key="healthPoints"
-            :src="hpImage"
-            alt="heart"
+          <transition
+            name="scale-in"
+            appear
           >
-        </KeycapIcon>
+            <KeycapIcon
+              color="red"
+              class="game-ui__health-point"
+            >
+              <img
+                :key="healthPoints"
+                :src="hpImage"
+                alt="heart"
+              >
+            </KeycapIcon>
+          </transition>
+        </div>
       </div>
 
       <transition>

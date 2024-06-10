@@ -138,7 +138,7 @@ export class GameScene extends Container {
   private checkAsteroidsCollisions() {
     this.asteroidsContainer.children.forEach((asteroidEl) => {
       const asteroid = asteroidEl as Asteroid;
-      if (checkCollision(asteroid.bounds, getBound(this.player))) {
+      if (checkCollision(asteroid.bounds, this.player.bounds)) {
         this.player.getDamage();
 
         this.playAsteroidExplosion(

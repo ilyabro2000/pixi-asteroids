@@ -67,9 +67,6 @@ const currentComponent = computed(() => {
     align-items: center;
     border-radius: 1rem;
     border: 0.3rem solid $color-additional;
-    background-color: rgba($color-main, 0.6);
-    backdrop-filter:  blur(0.5rem);
-    transition-delay: .4s;
 
     &:before {
       content: '';

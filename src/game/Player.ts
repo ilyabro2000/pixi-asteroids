@@ -11,6 +11,7 @@ import Emitter from '@/game/Emitter';
 import Events from '@/types/events';
 import gsap from 'gsap';
 import { Colors } from '@/types/Colors';
+import { IBound } from '@/game/collision';
 
 export class Player extends Container {
   private static DEFAULT_ACCELERATION = 0.5;
@@ -156,5 +157,14 @@ export class Player extends Container {
     });
 
     Emitter.emit(Events.PLAYER_DAMAGED);
+  }
+
+  get bounds(): IBound {
+    return {
+      left: this.position.x,
+      right: this.width + this.position.x - 10,
+      top: this.position.y,
+      bottom: this.height + this.position.y - 5,
+    };
   }
 }
