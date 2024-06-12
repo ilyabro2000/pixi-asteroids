@@ -24,7 +24,7 @@ export class GameScene extends Container {
 
   private player: Player;
 
-  private asteroidsMaxCount = 10;
+  private asteroidsMaxCount = 20;
 
   constructor() {
     super();
@@ -123,6 +123,8 @@ export class GameScene extends Container {
   }
 
   initSmallAsteroids(position: { x: number, y: number }) {
+    if (this.asteroidsContainer.children.length >= this.asteroidsMaxCount) return;
+
     (new Array(2)).fill(0).forEach(async () => {
       const asteroid = pool.get(Asteroid);
       await sleep(Math.random() * 400);

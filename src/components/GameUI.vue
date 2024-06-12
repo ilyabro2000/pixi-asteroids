@@ -107,7 +107,7 @@ const transformTimer = computed(() => `translateX(${time.value / 60 * 100}%)`);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.5rem;
     font-size: 2rem;
     color: white;
     width: 100%;
@@ -121,7 +121,7 @@ const transformTimer = computed(() => `translateX(${time.value / 60 * 100}%)`);
     width: 100%;
     height: .75rem;
     overflow: hidden;
-    background-color: $ui-main;
+    background-color: $ui-secondary;
 
     &:before {
       content: '';
@@ -130,7 +130,7 @@ const transformTimer = computed(() => `translateX(${time.value / 60 * 100}%)`);
       right: 0;
       width: 100%;
       height: 100%;
-      background-color: $ui-secondary;
+      background-color: $color-red;
       transform: v-bind(transformTimer);
       transition: transform 1s linear;
     }
@@ -164,8 +164,6 @@ const transformTimer = computed(() => `translateX(${time.value / 60 * 100}%)`);
     align-items: center;
     gap: 1rem;
     justify-content: flex-start;
-    margin-top: auto;
-    padding: 1.5rem 1.5rem;
 
     img {
       position: relative;

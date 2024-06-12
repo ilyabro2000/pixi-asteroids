@@ -44,7 +44,7 @@ export class AsteroidExplosion extends Container {
     particle.texture = Texture.from('meteor_squareLarge');
     particle.tint = color;
 
-    const width = randomRange(size / 5, size / 3).toFixed(0);
+    const width = randomRange(size / 6, size / 3).toFixed(0);
     particle.width = Number(width);
     particle.height = Number(width);
 

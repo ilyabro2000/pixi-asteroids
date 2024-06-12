@@ -117,10 +117,10 @@ export class Asteroid extends Container {
     this.position.y += rotatedVector.y * this.speed * deltaTime;
 
     if (
-      this.position.x < 0 - this.sprite.width / 2
-        || this.position.x > window.innerWidth + this.sprite.width / 2
-        || this.position.y < 0 - this.sprite.height / 2
-        || this.position.y > window.innerHeight + this.sprite.height / 2
+      this.position.x < 0 - this.width / 2
+        || this.position.x > window.innerWidth + this.width / 2
+        || this.position.y < 0 - this.height / 2
+        || this.position.y > window.innerHeight + this.height / 2
     ) {
       this.init();
     }
@@ -150,7 +150,8 @@ export class Asteroid extends Container {
     }
 
     pool.giveBack(this);
-    this.init();
+    this.removeFromParent();
+    // this.init();
   }
 
   get bounds(): IBound {

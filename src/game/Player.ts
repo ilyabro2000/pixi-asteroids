@@ -16,7 +16,7 @@ import { IBound } from '@/game/collision';
 export class Player extends Container {
   private static DEFAULT_ACCELERATION = 0.5;
 
-  private static SHOOT_DELAY = 220;
+  private static SHOOT_DELAY = 250;
 
   private static BACK_MOVE_KOEF = 0.5;
 
@@ -93,7 +93,7 @@ export class Player extends Container {
       this.rotationDirection = -1;
 
       if (this.inputVector.y === 0) {
-        this.inputVector.y += 0.5 * dt;
+        this.inputVector.y += 0.25;
       }
     }
 
@@ -101,7 +101,7 @@ export class Player extends Container {
       this.rotationDirection = 1;
 
       if (this.inputVector.y === 0) {
-        this.inputVector.y += 0.5 * dt;
+        this.inputVector.y += 0.25;
       }
     }
 
